@@ -1,3 +1,15 @@
+/*
+Given a string s and a dictionary of words dict, add spaces in s to construct a sentence where each word is a valid dictionary word.
+
+Return all such possible sentences.
+
+For example, given
+s = "catsanddog",
+dict = ["cat", "cats", "and", "sand", "dog"].
+
+A solution is ["cats and dog", "cat sand dog"].
+*/
+
 class Solution {
 public:
     vector<string> strRes;
@@ -12,13 +24,12 @@ public:
         setVec.clear();
         strRes.clear();
         seqRes.clear();
-        for (iter = dict.begin(); iter != dict.end(); iter++) {
-            setVec.push_back(*iter);
+        for (string ds: dict) {
+            setVec.push_back(ds);
             int pos = 0;
-            while ((pos = s.find(*iter, pos)) != string::npos)
-                dp[pos][pos+(*iter).length()-1] = setVec.size(), pos ++;
+            while ((pos = s.find(ds, pos)) != string::npos)
+                dp[pos][pos+ds.length()-1] = setVec.size(), pos ++;
         }
-        dpit(dp, 0, s.length() - 1);
         dfs_result(dp, 0, s.length()-1);
         return strRes;
     }
@@ -32,7 +43,7 @@ public:
             strRes.push_back(s);
             return;
         }
-        if (dp[s][e] == 0) return;
+        if (dpit(dp, s, e) == 0) return;
         for (int i = s; i <= e; i++) {
             if (dp[s][i] > 0) {
                 seqRes.push_back(dp[s][i]);
@@ -50,3 +61,4 @@ public:
         return dp[l][r] = 0;
     }
 };
+
